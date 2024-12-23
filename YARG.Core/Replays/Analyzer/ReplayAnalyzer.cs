@@ -228,8 +228,8 @@ namespace YARG.Core.Replays.Analyzer
                     return new YargFiveFretEngine(
                         notes,
                         _chart.SyncTrack,
-                        (GuitarEngineParameters) parameters,
-                        profile.IsBot);
+                        (GuitarEngineParameters)parameters,
+                        profile.IsBot, _chart);
                 }
                 case GameMode.FourLaneDrums:
                 case GameMode.FiveLaneDrums:
@@ -251,7 +251,7 @@ namespace YARG.Core.Replays.Analyzer
                         notes,
                         _chart.SyncTrack,
                         (DrumsEngineParameters) parameters,
-                        profile.IsBot);
+                        profile.IsBot, _chart);
                 }
                 case GameMode.ProKeys:
                 {
@@ -271,7 +271,7 @@ namespace YARG.Core.Replays.Analyzer
                         notes,
                         _chart.SyncTrack,
                         (ProKeysEngineParameters) parameters,
-                        profile.IsBot);
+                        profile.IsBot, _chart);
                 }
                 case GameMode.Vocals:
                 {
@@ -287,7 +287,7 @@ namespace YARG.Core.Replays.Analyzer
                         notes,
                         _chart.SyncTrack,
                         (VocalsEngineParameters) parameters,
-                        profile.IsBot);
+                        profile.IsBot, _chart);
                 }
                 default:
                     throw new InvalidOperationException("Game mode not configured!");
