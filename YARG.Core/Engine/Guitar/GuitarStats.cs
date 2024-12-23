@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using YARG.Core.Chart;
 using YARG.Core.Extensions;
 using YARG.Core.Replays;
 
@@ -20,6 +22,11 @@ namespace YARG.Core.Engine.Guitar
         /// Number of ghost inputs the player has made.
         /// </summary>
         public int GhostInputs;
+
+        public EnhancedGuitarStats EnhancedFiveFretStats = new();
+
+        public EnhancedGuitarStats.FiveFretSectionTracker SectionStatsTracker = null!;
+
 
         public GuitarStats()
         {
@@ -65,5 +72,109 @@ namespace YARG.Core.Engine.Guitar
         {
             return new GuitarReplayStats(name, this);
         }
+
+
     }
+    public class EnhancedGuitarStats
+    {
+        public struct NoteTypesStorage
+        {
+            public int noteTypeStrum;
+            public int noteTypeHOPO;
+            public int noteTypeTap;
+            public int fretGreen;
+            public int fretRed;
+            public int fretYellow;
+            public int fretBlue;
+            public int fretOrange;
+            //public int fretBlack;
+            //public int fretWhite;
+            public int AllNoteCount;
+            public int fretOpen;
+            public int countNote;
+
+
+            public void CountNotesInSong(GuitarNote notes)
+            {
+
+
+                AllNoteCount++;
+                if (notes.IsStrum)
+                {
+                    noteTypeStrum++;
+                }
+                else if (notes.IsHopo)
+                {
+                    noteTypeHOPO++;
+                }
+                else if (notes.IsTap)
+                {
+                    noteTypeTap++;
+                }
+
+                if (notes.Fret == (int)FiveFretGuitarFret.Open)
+                {
+                    fretOpen++;
+                }
+
+            }
+        }
+
+        public NoteTypesStorage TotalNotesInSong = new();
+        public NoteTypesStorage TotalNotesHitInSong = new();
+        public NoteTypesStorage TotalNotesMissedInSong = new();
+
+
+
+
+
+
+
+
+        public class FiveFretSectionTracker
+        {
+
+            public class SectionStats
+            {
+                public int SectionIndex;
+                public NoteTypesStorage TotalNotesInSection = new();
+                public NoteTypesStorage TotalNotesHitInSection = new();
+                public NoteTypesStorage TotalNotesMissedInSection = new();
+                public int TotalScoreInSection;
+                public string sectionName;
+            }
+
+
+            public SectionStats[] SectionStatsArray;
+
+            public FiveFretSectionTracker(List<Section> sections, InstrumentDifficulty<GuitarNote> difficulty)
+            {
+
+                SectionStatsArray = new SectionStats[sections.Count];
+
+                for (int i = 0; i < sections.Count; i++)
+                {
+                    var section = sections[i];
+                    var sectionStats = new SectionStats();
+
+                    foreach (var note in difficulty.Notes)
+                    {
+                        if (note.Tick >= section.Tick && note.Tick < section.TickEnd)
+                        {
+                            sectionStats.TotalNotesInSection.CountNotesInSong(note);
+
+                        }
+                    }
+                    SectionStatsArray[i] = sectionStats;
+                }
+            }
+        }
+
+    }
+
+
+
+
+
+
 }

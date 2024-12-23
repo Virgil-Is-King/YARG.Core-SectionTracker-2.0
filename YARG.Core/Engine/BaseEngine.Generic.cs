@@ -65,9 +65,11 @@ namespace YARG.Core.Engine
         public override BaseEngineParameters BaseParameters => EngineParameters;
         public override BaseStats            BaseStats      => EngineStats;
 
+        protected int CurrentSectionIndex = 0;
+        protected int NextSectionIndex => CurrentSectionIndex + 1;
         protected BaseEngine(InstrumentDifficulty<TNoteType> chart, SyncTrack syncTrack,
-            TEngineParams engineParameters, bool isChordSeparate, bool isBot)
-            : base(syncTrack, isChordSeparate, isBot)
+            TEngineParams engineParameters, bool isChordSeparate, bool isBot, SongChart FullChart)
+            : base(syncTrack, isChordSeparate, isBot, FullChart)
         {
             Chart = chart;
             Notes = Chart.Notes;
@@ -299,6 +301,11 @@ namespace YARG.Core.Engine
                         CurrentWaitCountdownIndex++;
                     }
                 }
+            }
+
+            while (NextSectionIndex < FullChart.Sections.Count && CurrentTick >= FullChart.Sections[NextSectionIndex].Tick)
+            {
+                CurrentSectionIndex++;
             }
         }
 

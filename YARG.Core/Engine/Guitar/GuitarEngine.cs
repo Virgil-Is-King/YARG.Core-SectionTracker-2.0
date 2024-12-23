@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using YARG.Core.Chart;
 using YARG.Core.Input;
 using YARG.Core.Logging;
@@ -42,14 +42,22 @@ namespace YARG.Core.Engine.Guitar
         protected double FrontEndExpireTime;
 
         protected GuitarEngine(InstrumentDifficulty<GuitarNote> chart, SyncTrack syncTrack,
-            GuitarEngineParameters engineParameters, bool isBot)
-            : base(chart, syncTrack, engineParameters, false, isBot)
+            GuitarEngineParameters engineParameters, bool isBot, SongChart FullChart)
+            : base(chart, syncTrack, engineParameters, false, isBot, FullChart)
         {
             StrumLeniencyTimer = new EngineTimer(engineParameters.StrumLeniency);
             HopoLeniencyTimer = new EngineTimer(engineParameters.HopoLeniency);
             StarPowerWhammyTimer = new EngineTimer(engineParameters.StarPowerWhammyBuffer);
 
+            EngineStats.SectionStatsTracker = new EnhancedGuitarStats.FiveFretSectionTracker(FullChart.Sections, chart);
+
+
             GetWaitCountdowns(Notes);
+
+            foreach (var note in Notes)
+            {
+                EngineStats.EnhancedFiveFretStats.TotalNotesInSong.CountNotesInSong(note);
+            }
         }
 
         public EngineTimer GetHopoLeniencyTimer() => HopoLeniencyTimer;
@@ -254,6 +262,9 @@ namespace YARG.Core.Engine.Guitar
 
             WasNoteGhosted = false;
 
+            EngineStats.EnhancedFiveFretStats.TotalNotesHitInSong.CountNotesInSong(note);
+            EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesHitInSection.CountNotesInSong(note);
+
             OnNoteHit?.Invoke(NoteIndex, note);
             base.HitNote(note);
         }
@@ -284,6 +295,8 @@ namespace YARG.Core.Engine.Guitar
             }
 
             WasNoteGhosted = false;
+            EngineStats.EnhancedFiveFretStats.TotalNotesMissedInSong.CountNotesInSong(note);
+            EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesMissedInSection.CountNotesInSong(note);
 
             EngineStats.Combo = 0;
 

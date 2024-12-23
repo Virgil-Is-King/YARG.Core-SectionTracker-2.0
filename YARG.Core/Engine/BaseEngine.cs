@@ -47,8 +47,10 @@ namespace YARG.Core.Engine
         protected bool StarPowerIsAllowed = true;
 
         protected readonly SyncTrack SyncTrack;
-
+        
         protected readonly uint Resolution;
+
+        protected readonly SongChart FullChart;
 
         public readonly uint TicksPerQuarterSpBar;
         public readonly uint TicksPerHalfSpBar;
@@ -127,7 +129,7 @@ namespace YARG.Core.Engine
 
         protected SyncTrackChange CurrentSyncTrackState => SyncTrackChanges[CurrentSyncIndex];
 
-        protected BaseEngine(SyncTrack syncTrack, bool isChordSeparate, bool isBot)
+        protected BaseEngine(SyncTrack syncTrack, bool isChordSeparate, bool isBot, SongChart FullChart)
         {
             SyncTrack = syncTrack;
             Resolution = syncTrack.Resolution;
@@ -190,6 +192,7 @@ namespace YARG.Core.Engine
             }
 
             CurrentSyncIndex = 0;
+            this.FullChart = FullChart;
         }
 
         public EngineTimer GetStarPowerWhammyTimer() => StarPowerWhammyTimer;
