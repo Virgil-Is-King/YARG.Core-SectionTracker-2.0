@@ -163,7 +163,7 @@ namespace YARG.Core.Engine.Guitar
                 }
             }
 
-            EngineStats.Combo = 0;
+            ResetCombo();
             EngineStats.Overstrums++;
 
             UpdateMultiplier();
@@ -230,12 +230,7 @@ namespace YARG.Core.Engine.Guitar
                 EndSolo();
             }
 
-            EngineStats.Combo++;
-
-            if (EngineStats.Combo > EngineStats.MaxCombo)
-            {
-                EngineStats.MaxCombo = EngineStats.Combo;
-            }
+            IncrementCombo();
 
             EngineStats.NotesHit++;
 
@@ -298,7 +293,7 @@ namespace YARG.Core.Engine.Guitar
             EngineStats.EnhancedFiveFretStats.TotalNotesMissedInSong.CountNotesInSong(note);
             EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesMissedInSection.CountNotesInSong(note);
 
-            EngineStats.Combo = 0;
+            ResetCombo();
 
             UpdateMultiplier();
 
