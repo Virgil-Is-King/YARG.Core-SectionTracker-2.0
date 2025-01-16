@@ -46,6 +46,8 @@ namespace YARG.Core.Engine
 
         protected bool StarPowerIsAllowed = true;
 
+        protected readonly SongChart FullChart;
+
         protected readonly SyncTrack SyncTrack;
         
         protected readonly uint Resolution;
@@ -68,6 +70,7 @@ namespace YARG.Core.Engine
 
         private readonly List<double> _starPowerTempoTsTicks = new();
 
+        
         public int NoteIndex { get; protected set; }
 
         public double CurrentTime { get; protected set; }

@@ -54,6 +54,11 @@ namespace YARG.Core.Engine
         protected          int[]  StarScoreThresholds { get; }
         protected readonly double TicksPerSustainPoint;
         protected readonly uint   SustainBurstThreshold;
+        protected  int CurrentSectionIndex = 0;
+        protected  int NextSectionIndex => CurrentSectionIndex + 1;
+
+
+        
 
         public readonly TEngineStats EngineStats;
 

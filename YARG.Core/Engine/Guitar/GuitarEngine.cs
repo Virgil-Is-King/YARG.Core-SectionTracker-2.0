@@ -43,7 +43,11 @@ namespace YARG.Core.Engine.Guitar
 
         protected GuitarEngine(InstrumentDifficulty<GuitarNote> chart, SyncTrack syncTrack,
             GuitarEngineParameters engineParameters, bool isBot, SongChart FullChart)
+<<<<<<< Updated upstream
             : base(chart, syncTrack, engineParameters, false, isBot, FullChart)
+=======
+            : base(chart, syncTrack, engineParameters, false, isBot)
+>>>>>>> Stashed changes
         {
             StrumLeniencyTimer = new EngineTimer(engineParameters.StrumLeniency);
             HopoLeniencyTimer = new EngineTimer(engineParameters.HopoLeniency);
@@ -54,10 +58,20 @@ namespace YARG.Core.Engine.Guitar
 
             GetWaitCountdowns(Notes);
 
+<<<<<<< Updated upstream
             foreach (var note in Notes)
             {
                 EngineStats.EnhancedFiveFretStats.TotalNotesInSong.CountNotesInSong(note);
             }
+=======
+
+            foreach (var note in Notes)
+            {
+                EngineStats.EnhancedFiveFretStats.TotalNoteStats.CountNotesInSong(note);
+            }
+
+
+>>>>>>> Stashed changes
         }
 
         public EngineTimer GetHopoLeniencyTimer() => HopoLeniencyTimer;
@@ -256,6 +270,10 @@ namespace YARG.Core.Engine.Guitar
             }
 
             WasNoteGhosted = false;
+            EngineStats.EnhancedFiveFretStats.NoteHitStats.CountNotesInSong(note);
+            EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesHitInSection.CountNotesInSong(note);
+
+
 
             EngineStats.EnhancedFiveFretStats.TotalNotesHitInSong.CountNotesInSong(note);
             EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesHitInSection.CountNotesInSong(note);
@@ -296,6 +314,11 @@ namespace YARG.Core.Engine.Guitar
             ResetCombo();
 
             UpdateMultiplier();
+
+            EngineStats.EnhancedFiveFretStats.NoteMissStats.CountNotesInSong(note);
+            EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesHitInSection.CountNotesInSong(note);
+
+
 
             OnNoteMissed?.Invoke(NoteIndex, note);
             base.MissNote(note);

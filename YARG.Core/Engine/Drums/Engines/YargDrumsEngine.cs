@@ -9,7 +9,11 @@ namespace YARG.Core.Engine.Drums.Engines
     {
         public YargDrumsEngine(InstrumentDifficulty<DrumNote> chart, SyncTrack syncTrack,
             DrumsEngineParameters engineParameters, bool isBot, SongChart FullChart)
+<<<<<<< Updated upstream
             : base(chart, syncTrack, engineParameters, isBot, FullChart)
+=======
+            : base(chart, syncTrack, engineParameters, isBot)
+>>>>>>> Stashed changes
         {
         }
 
