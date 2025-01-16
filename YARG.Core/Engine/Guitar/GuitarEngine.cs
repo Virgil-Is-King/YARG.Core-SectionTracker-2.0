@@ -43,27 +43,14 @@ namespace YARG.Core.Engine.Guitar
 
         protected GuitarEngine(InstrumentDifficulty<GuitarNote> chart, SyncTrack syncTrack,
             GuitarEngineParameters engineParameters, bool isBot, SongChart FullChart)
-<<<<<<< Updated upstream
-            : base(chart, syncTrack, engineParameters, false, isBot, FullChart)
-=======
             : base(chart, syncTrack, engineParameters, false, isBot)
->>>>>>> Stashed changes
         {
             StrumLeniencyTimer = new EngineTimer(engineParameters.StrumLeniency);
             HopoLeniencyTimer = new EngineTimer(engineParameters.HopoLeniency);
             StarPowerWhammyTimer = new EngineTimer(engineParameters.StarPowerWhammyBuffer);
 
-            EngineStats.SectionStatsTracker = new EnhancedGuitarStats.FiveFretSectionTracker(FullChart.Sections, chart);
-
-
             GetWaitCountdowns(Notes);
 
-<<<<<<< Updated upstream
-            foreach (var note in Notes)
-            {
-                EngineStats.EnhancedFiveFretStats.TotalNotesInSong.CountNotesInSong(note);
-            }
-=======
 
             foreach (var note in Notes)
             {
@@ -71,7 +58,6 @@ namespace YARG.Core.Engine.Guitar
             }
 
 
->>>>>>> Stashed changes
         }
 
         public EngineTimer GetHopoLeniencyTimer() => HopoLeniencyTimer;
@@ -177,7 +163,7 @@ namespace YARG.Core.Engine.Guitar
                 }
             }
 
-            ResetCombo();
+            EngineStats.Combo = 0;
             EngineStats.Overstrums++;
 
             UpdateMultiplier();
@@ -244,7 +230,12 @@ namespace YARG.Core.Engine.Guitar
                 EndSolo();
             }
 
-            IncrementCombo();
+            EngineStats.Combo++;
+
+            if (EngineStats.Combo > EngineStats.MaxCombo)
+            {
+                EngineStats.MaxCombo = EngineStats.Combo;
+            }
 
             EngineStats.NotesHit++;
 
@@ -274,9 +265,6 @@ namespace YARG.Core.Engine.Guitar
             EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesHitInSection.CountNotesInSong(note);
 
 
-
-            EngineStats.EnhancedFiveFretStats.TotalNotesHitInSong.CountNotesInSong(note);
-            EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesHitInSection.CountNotesInSong(note);
 
             OnNoteHit?.Invoke(NoteIndex, note);
             base.HitNote(note);
@@ -308,10 +296,8 @@ namespace YARG.Core.Engine.Guitar
             }
 
             WasNoteGhosted = false;
-            EngineStats.EnhancedFiveFretStats.TotalNotesMissedInSong.CountNotesInSong(note);
-            EngineStats.SectionStatsTracker.SectionStatsArray[CurrentSectionIndex].TotalNotesMissedInSection.CountNotesInSong(note);
 
-            ResetCombo();
+            EngineStats.Combo = 0;
 
             UpdateMultiplier();
 

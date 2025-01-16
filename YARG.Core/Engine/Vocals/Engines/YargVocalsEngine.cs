@@ -9,11 +9,7 @@ namespace YARG.Core.Engine.Vocals.Engines
     {
         public YargVocalsEngine(InstrumentDifficulty<VocalNote> chart, SyncTrack syncTrack,
             VocalsEngineParameters engineParameters, bool isBot, SongChart FullChart)
-<<<<<<< Updated upstream
-            : base(chart, syncTrack, engineParameters, isBot, FullChart)
-=======
             : base(chart, syncTrack, engineParameters, isBot)
->>>>>>> Stashed changes
         {
         }
 

@@ -23,8 +23,6 @@ namespace YARG.Core.Engine.Vocals
 
         public override float Percent => TotalTicks == 0 ? 1f : (float) TicksHit / TotalTicks;
 
-        public override int BandComboUnits => 10;
-
         public VocalsStats()
         {
         }

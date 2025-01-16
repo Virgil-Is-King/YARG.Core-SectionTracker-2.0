@@ -54,8 +54,8 @@ namespace YARG.Core.Engine.Vocals
         public uint LastSingTick { get; protected set; }
 
         protected VocalsEngine(InstrumentDifficulty<VocalNote> chart, SyncTrack syncTrack,
-            VocalsEngineParameters engineParameters, bool isBot, SongChart FullChart)
-            : base(chart, syncTrack, engineParameters, false, isBot, FullChart)
+            VocalsEngineParameters engineParameters, bool isBot)
+            : base(chart, syncTrack, engineParameters, false, isBot)
         {
         }
 
@@ -154,7 +154,12 @@ namespace YARG.Core.Engine.Vocals
                 var ticks = GetTicksInPhrase(note);
                 if (ticks != 0)
                 {
-                    IncrementCombo();
+                    EngineStats.Combo++;
+
+                    if (EngineStats.Combo > EngineStats.MaxCombo)
+                    {
+                        EngineStats.MaxCombo = EngineStats.Combo;
+                    }
 
                     AddScore(note);
 
@@ -202,7 +207,7 @@ namespace YARG.Core.Engine.Vocals
                 StartSolo();
             }
 
-            ResetCombo();
+            EngineStats.Combo = 0;
 
             AddPartialScore(hitPercent);
 

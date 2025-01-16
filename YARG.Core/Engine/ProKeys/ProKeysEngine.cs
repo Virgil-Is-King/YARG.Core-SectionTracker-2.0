@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using YARG.Core.Chart;
 using YARG.Core.Input;
 using YARG.Core.Logging;
@@ -42,8 +42,8 @@ namespace YARG.Core.Engine.ProKeys
         protected ProKeysNote? FatFingerNote;
 
         protected ProKeysEngine(InstrumentDifficulty<ProKeysNote> chart, SyncTrack syncTrack,
-            ProKeysEngineParameters engineParameters, bool isBot, SongChart FullChart)
-            : base(chart, syncTrack, engineParameters, true, isBot, FullChart)
+            ProKeysEngineParameters engineParameters, bool isBot)
+            : base(chart, syncTrack, engineParameters, true, isBot)
         {
             ChordStaggerTimer = new(engineParameters.ChordStaggerWindow);
             FatFingerTimer = new(engineParameters.FatFingerWindow);
@@ -153,7 +153,7 @@ namespace YARG.Core.Engine.ProKeys
                 }
             }
 
-            ResetCombo();
+            EngineStats.Combo = 0;
             EngineStats.Overhits++;
 
             UpdateMultiplier();
@@ -221,7 +221,12 @@ namespace YARG.Core.Engine.ProKeys
             // Only increase combo for the first note in a chord
             if (!partiallyHit)
             {
-                IncrementCombo();
+                EngineStats.Combo++;
+
+                if (EngineStats.Combo > EngineStats.MaxCombo)
+                {
+                    EngineStats.MaxCombo = EngineStats.Combo;
+                }
             }
 
             EngineStats.NotesHit++;
@@ -270,13 +275,12 @@ namespace YARG.Core.Engine.ProKeys
             // If no notes within a chord were hit, combo is 0
             if (note.ParentOrSelf.WasFullyMissed())
             {
-                ResetCombo();
+                EngineStats.Combo = 0;
             }
             else
             {
                 // If any of the notes in a chord were hit, the combo for that note is rewarded, but it is reset back to 1
-                ResetCombo();
-                IncrementCombo();
+                EngineStats.Combo = 1;
             }
 
             UpdateMultiplier();

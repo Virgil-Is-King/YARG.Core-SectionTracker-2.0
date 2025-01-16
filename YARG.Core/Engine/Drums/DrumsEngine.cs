@@ -26,8 +26,8 @@ namespace YARG.Core.Engine.Drums
         protected DrumsAction? Action;
 
         protected DrumsEngine(InstrumentDifficulty<DrumNote> chart, SyncTrack syncTrack,
-            DrumsEngineParameters engineParameters, bool isBot, SongChart FullChart)
-            : base(chart, syncTrack, engineParameters, true, isBot,FullChart)
+            DrumsEngineParameters engineParameters, bool isBot)
+            : base(chart, syncTrack, engineParameters, true, isBot)
         {
             GetWaitCountdowns(Notes);
         }
@@ -72,7 +72,7 @@ namespace YARG.Core.Engine.Drums
                 }
             }
 
-            ResetCombo();
+            EngineStats.Combo = 0;
             EngineStats.Overhits++;
 
             UpdateMultiplier();
@@ -127,7 +127,12 @@ namespace YARG.Core.Engine.Drums
                 ActivateStarPower();
             }
 
-            IncrementCombo();
+            EngineStats.Combo++;
+
+            if (EngineStats.Combo > EngineStats.MaxCombo)
+            {
+                EngineStats.MaxCombo = EngineStats.Combo;
+            }
 
             EngineStats.NotesHit++;
 
@@ -248,7 +253,7 @@ namespace YARG.Core.Engine.Drums
                 StartSolo();
             }
 
-            ResetCombo();
+            EngineStats.Combo = 0;
 
             UpdateMultiplier();
 

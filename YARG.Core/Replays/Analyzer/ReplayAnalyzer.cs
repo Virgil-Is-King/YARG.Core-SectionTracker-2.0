@@ -228,11 +228,7 @@ namespace YARG.Core.Replays.Analyzer
                     return new YargFiveFretEngine(
                         notes,
                         _chart.SyncTrack,
-<<<<<<< Updated upstream
-                        (GuitarEngineParameters)parameters,
-=======
                         (GuitarEngineParameters) parameters,
->>>>>>> Stashed changes
                         profile.IsBot, _chart);
                 }
                 case GameMode.FourLaneDrums:
